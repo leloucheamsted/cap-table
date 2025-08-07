@@ -112,13 +112,13 @@ export function AdminDashboard() {
 
         shareholdersWithPercentage.forEach(holder => {
             if (holder.percentage >= 25) {
-                ordinary += holder.percentage; // Gros détenteurs (>= 25%)
+                ordinary += holder.percentage;
             } else if (holder.percentage >= 10) {
-                seed += holder.percentage; // Détenteurs moyens (10-24.99%)
+                seed += holder.percentage;
             } else if (holder.percentage >= 5) {
-                seriesA += holder.percentage; // Petits détenteurs (5-9.99%)
+                seriesA += holder.percentage;
             } else {
-                seriesB += holder.percentage; // Très petits détenteurs (< 5%)
+                seriesB += holder.percentage;
             }
         });
 
@@ -358,7 +358,6 @@ export function AdminDashboard() {
         }
     ];
 
-    // Colonnes pour le tableau complet des transactions
     const fullTransactionsColumns = [
         {
             title: 'ID',

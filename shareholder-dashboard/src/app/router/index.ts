@@ -2,8 +2,8 @@ import { createBrowserRouter } from 'react-router-dom';
 import React from 'react';
 
 import { LoginPage } from '../../presentation/pages/LoginPage';
-import { AdminDashboard } from '../../presentation/pages/AdminDashboard';
 import { ShareDashboard } from '../../presentation/pages/ShareDashboard';
+import { AdminDashboard } from '../../presentation/pages/AdminDashboard';
 
 export const router = createBrowserRouter([
     {
