@@ -155,7 +155,6 @@ describe('AdminDashboard', () => {
     test('renders AdminDashboard with correct title and stats', () => {
         render(<AdminDashboard />);
 
-        // Vérifier que les statistiques sont affichées
         expect(screen.getByText('1,500')).toBeInTheDocument(); // Total shares
         expect(screen.getByText('$1,500')).toBeInTheDocument(); // Total cash raised
         expect(screen.getByText('2')).toBeInTheDocument(); // Total stakeholders
@@ -177,7 +176,6 @@ describe('AdminDashboard', () => {
     test('displays stakeholders table with correct data', () => {
         render(<AdminDashboard />);
 
-        // Vérifier que le tableau des stakeholders contient les bonnes données
         expect(screen.getByText('John Doe')).toBeInTheDocument();
         expect(screen.getByText('Jane Smith')).toBeInTheDocument();
         expect(screen.getByText('john@example.com')).toBeInTheDocument();
@@ -192,7 +190,6 @@ describe('AdminDashboard', () => {
         const addButton = screen.getByText('Add new shareholder');
         fireEvent.click(addButton);
 
-        // Vérifier que le modal s'ouvre
         expect(screen.getByText('Add New Shareholder')).toBeInTheDocument();
     });
 
@@ -202,7 +199,6 @@ describe('AdminDashboard', () => {
         const addIssuanceButtons = screen.getAllByText('Add Issuance');
         fireEvent.click(addIssuanceButtons[0]);
 
-        // Vérifier que le formulaire d'issuance s'affiche
         await waitFor(() => {
             expect(screen.getByText('Add New Issuance for John Doe')).toBeInTheDocument();
             expect(screen.getByPlaceholderText('Enter number of shares')).toBeInTheDocument();
@@ -218,7 +214,6 @@ describe('AdminDashboard', () => {
 
         render(<AdminDashboard />);
 
-        // Ouvrir le formulaire d'issuance
         const addIssuanceButtons = screen.getAllByText('Add Issuance');
         fireEvent.click(addIssuanceButtons[0]);
 
@@ -230,7 +225,6 @@ describe('AdminDashboard', () => {
             fireEvent.click(submitButton);
         });
 
-        // Vérifier que assignShares a été appelé
         await waitFor(() => {
             expect(mockAssignShares).toHaveBeenCalledWith(1, 100);
         });
@@ -250,11 +244,9 @@ describe('AdminDashboard', () => {
 
         render(<AdminDashboard />);
 
-        // Ouvrir le modal d'ajout d'actionnaire
         const addButton = screen.getByText('Add new shareholder');
         fireEvent.click(addButton);
 
-        // Remplir le formulaire
         await waitFor(() => {
             fireEvent.change(screen.getByLabelText('Full Name'), {
                 target: { value: 'New Shareholder' }
@@ -273,7 +265,6 @@ describe('AdminDashboard', () => {
             fireEvent.click(submitButton);
         });
 
-        // Vérifier que createShareholder a été appelé
         await waitFor(() => {
             expect(mockCreateShareholder).toHaveBeenCalledWith({
                 name: 'New Shareholder',
@@ -287,7 +278,6 @@ describe('AdminDashboard', () => {
     test('displays error message for invalid share amount', async () => {
         render(<AdminDashboard />);
 
-        // Ouvrir le formulaire d'issuance
         const addIssuanceButtons = screen.getAllByText('Add Issuance');
         fireEvent.click(addIssuanceButtons[0]);
 
@@ -299,8 +289,6 @@ describe('AdminDashboard', () => {
             fireEvent.click(submitButton);
         });
 
-        // Le composant devrait afficher une erreur via message.error
-        // Dans un vrai test, on vérifierait que l'erreur est affichée
     });
 
     test('handles logout flow', async () => {
@@ -312,21 +300,15 @@ describe('AdminDashboard', () => {
 
         render(<AdminDashboard />);
 
-        // Simuler le clic sur logout (le bouton n'est peut-être pas visible dans ce test)
-        // On peut tester directement la fonction handleLogout si elle était exposée
-        // Ou on peut tester via l'ouverture du modal de logout
+
     });
 
     test('calculates shareholder composition correctly', () => {
         render(<AdminDashboard />);
 
-        // Vérifier que la composition des actionnaires est calculée
-        // Les actionnaires avec des parts > 0 devraient être inclus
-        // Dans ce cas, John Doe (1000 shares) et Jane Smith (500 shares)
     });
 
     test('filters stakeholders by share ownership categories', () => {
-        // Créer des données de test avec différents pourcentages
         const testIssuances = [
             {
                 id: 1,
@@ -403,7 +385,6 @@ describe('AdminDashboard', () => {
 
         render(<AdminDashboard />);
 
-        // Vérifier que les catégories sont correctement assignées
         expect(screen.getByText('Major Holder')).toBeInTheDocument();
         expect(screen.getByText('Medium Holder')).toBeInTheDocument();
         expect(screen.getByText('Small Holder')).toBeInTheDocument();
