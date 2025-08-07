@@ -50,19 +50,6 @@ export const LoginPage: React.FC = () => {
         password: ''
     });
     const [hasRedirected, setHasRedirected] = useState(false);
-
-    // Redirect if already authenticated
-    // useEffect(() => {
-    //     if (isAuthenticated && user && !hasRedirected) {
-    //         setHasRedirected(true);
-    //         const redirectPath = user.is_admin ? '/admin' : '/share';
-    //         console.log('Redirecting to:', redirectPath, 'isAdmin:', user.is_admin);
-    //         navigate(redirectPath, { replace: true });
-    //     }
-    // }, [isAuthenticated, user, navigate, hasRedirected]);
-
-
-    // Clear error when form values change
     useEffect(() => {
         if (error) {
             clearError();
@@ -114,18 +101,7 @@ export const LoginPage: React.FC = () => {
         console.log('Form validation failed:', errorInfo);
     };
 
-    // if (isAuthenticated && user && hasRedirected) {
-    //     return (
-    //         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-    //             <div className="text-center">
-    //                 <LoadingOutlined spin className="text-4xl text-blue-500 mb-4" />
-    //                 <Text className="text-lg text-gray-600">
-    //                     Redirecting to {user.is_admin ? 'Admin' : 'Shareholder'} Dashboard...
-    //                 </Text>
-    //             </div>
-    //         </div>
-    //     );
-    // }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-5">
             <Row className="w-full max-w-[1200px]" justify="center">

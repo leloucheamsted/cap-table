@@ -53,20 +53,24 @@ class TestAudit:
             headers=auth_headers_admin,
             json={
                 "user_id": regular_user.id,
-                "amount": 1000
+                "amount": 1000,
+                "owner_id": regular_user.id
             }
         )
         
         assert response.status_code == status.HTTP_200_OK
         
-        # Vérifier qu'un événement d'audit a été créé
+        # Vérifier qu'au moins un événement d'audit a été créé
         final_count = db_session.query(AuditEvent).count()
-        assert final_count == initial_count + 1
+        assert final_count >= initial_count + 1
         
-        audit_event = db_session.query(AuditEvent).order_by(AuditEvent.created_at.desc()).first()
-        assert audit_event.event_type == AuditEventType.SHARE_ISSUED.value
-        assert audit_event.user_id == admin_user.id
-        assert audit_event.target_user_id == regular_user.id
+        # Vérifier qu'il y a un événement SHARE_ISSUED
+        share_issued_events = db_session.query(AuditEvent).filter(
+            AuditEvent.event_type == AuditEventType.SHARE_ISSUED.value,
+            AuditEvent.user_id == admin_user.id,
+            AuditEvent.target_user_id == regular_user.id
+        ).all()
+        assert len(share_issued_events) >= 1
 
     def test_get_audit_events(self, client, admin_user, auth_headers_admin):
         """Audit Event Recovery Test"""

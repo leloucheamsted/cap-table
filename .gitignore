@@ -27,7 +27,7 @@ shareholder-dashboard/.env.production.local
 # OS
 .DS_Store
 Thumbs.db
-
+.env
 # Logs
 *.log
 npm-debug.log*

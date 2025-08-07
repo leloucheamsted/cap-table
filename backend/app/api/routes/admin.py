@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from app.database import get_db
 from app.models.user import User
 from app.models.share import ShareIssuance
@@ -24,9 +25,15 @@ def add_shareholder(user: UserCreate, request: Request, db: Session = Depends(ge
     db_user = user_crud.get_user_by_email(db, user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already exists")
-    new_user = user_crud.create_user(db, user, is_admin=False)
     
-    AuditService.log_user_creation(db, current_admin.id, new_user.id, request)
+    try:
+        new_user = user_crud.create_user(db, user, is_admin=False)
+        AuditService.log_user_creation(db, current_admin.id, new_user.id, request)
+        return new_user
+    except IntegrityError:
+        # Capture l'erreur de contrainte d'unicité de la base de données
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Email already exists")
     
     return new_user
 

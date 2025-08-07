@@ -43,7 +43,7 @@ def get_user_by_id(db: Session, user_id: int):
 def get_shares_distribution(db: Session):
     total_shares = db.query(func.sum(ShareIssuance.amount)).scalar() or 0
     
-    distribution = b.query(
+    distribution = db.query(
         User.name,
         func.sum(ShareIssuance.amount).label('shares_count')
     ).join(

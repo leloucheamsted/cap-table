@@ -11,7 +11,8 @@ class TestAdmin:
             json={
                 "name": "New Shareholder",
                 "email": "shareholder@test.com",
-                "password": "password123"
+                "password": "password123",
+                "confirm_password": "password123",
             }
         )
         
@@ -23,12 +24,14 @@ class TestAdmin:
 
     def test_create_shareholder_duplicate_email(self, client, admin_user, regular_user, auth_headers_admin):
         """Test shareholder creation with existing email"""
+        # Le regular_user utilise déjà "user@test.com"
         response = client.post("/admin/shareholders",
             headers=auth_headers_admin,
             json={
                 "name": "Duplicate User",
-                "email": "user@test.com",  # Email déjà utilisé
-                "password": "password123"
+                "email": "user@test.com",  # Email déjà utilisé par regular_user
+                "password": "password123", 
+                "confirm_password": "password123"
             }
         )
         
@@ -41,13 +44,14 @@ class TestAdmin:
             headers=auth_headers_admin,
             json={
                 "user_id": regular_user.id,
-                "amount": 1000
+                "amount": 1000,
+                "owner_id": regular_user.id
             }
         )
         
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
-        assert data["user_id"] == regular_user.id
+        assert data["owner_id"] == regular_user.id
         assert data["amount"] == 1000
 
     def test_issue_shares_nonexistent_user(self, client, admin_user, auth_headers_admin):
@@ -56,7 +60,8 @@ class TestAdmin:
             headers=auth_headers_admin,
             json={
                 "user_id": 99999,  # Non-existent ID
-                "amount": 1000
+                "amount": 1000,
+                "owner_id": 99999  # Non-existent ID
             }
         )
         
@@ -69,7 +74,8 @@ class TestAdmin:
             headers=auth_headers_admin,
             json={
                 "user_id": admin_user.id,
-                "amount": 1000
+                "amount": 1000, 
+                "owner_id": admin_user.id  # Admin user
             }
         )
         
@@ -82,7 +88,8 @@ class TestAdmin:
             headers=auth_headers_admin,
             json={
                 "user_id": regular_user.id,
-                "amount": -100  # Negative amount
+                "amount": -100,  # Negative amount
+                "owner_id": regular_user.id
             }
         )
         

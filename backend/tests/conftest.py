@@ -54,9 +54,14 @@ def client(db_session):
     with TestClient(app) as test_client:
         yield test_client
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def admin_user(db_session):
     """Admin user for tests"""
+    # Vérifier d'abord si l'utilisateur existe déjà
+    existing_admin = db_session.query(User).filter(User.email == "admin@test.com").first()
+    if existing_admin:
+        return existing_admin
+        
     admin = User(
         email="admin@test.com",
         name="Admin Test",
@@ -68,9 +73,14 @@ def admin_user(db_session):
     db_session.refresh(admin)
     return admin
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def regular_user(db_session):
     """Regular user for tests"""
+    # Vérifier d'abord si l'utilisateur existe déjà
+    existing_user = db_session.query(User).filter(User.email == "user@test.com").first()
+    if existing_user:
+        return existing_user
+        
     user = User(
         email="user@test.com",
         name="User Test",
